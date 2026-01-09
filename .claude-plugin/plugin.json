@@ -1,0 +1,45 @@
+{
+  "name": "pm-toolkit",
+  "version": "0.1.0",
+  "description": "The PM toolkit that makes engineers and product managers work from the same source of truth",
+  "author": "Esk3nder",
+  "repository": "https://github.com/Esk3nder/pm-plugin-research",
+  "license": "MIT",
+  "keywords": [
+    "product-management",
+    "prd",
+    "roadmap",
+    "linear",
+    "jira",
+    "feedback"
+  ],
+  "commands": [
+    "commands/write-prd.md",
+    "commands/sync-roadmap.md",
+    "commands/analyze-feedback.md",
+    "commands/sprint-review.md"
+  ],
+  "agents": [
+    "agents/spec-writer.md",
+    "agents/user-researcher.md",
+    "agents/roadmap-planner.md"
+  ],
+  "skills": [
+    "skills/ProductManagement"
+  ],
+  "mcpServers": {
+    "linear-enhanced": {
+      "command": "bun",
+      "args": ["run", "mcp-servers/linear-enhanced/index.ts"]
+    },
+    "jira-pm": {
+      "command": "bun",
+      "args": ["run", "mcp-servers/jira-pm/index.ts"]
+    },
+    "feedback-hub": {
+      "command": "bun",
+      "args": ["run", "mcp-servers/feedback-hub/index.ts"]
+    }
+  },
+  "hooks": "hooks/hooks.json"
+}

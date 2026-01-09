@@ -1,0 +1,36 @@
+{
+  "hooks": [
+    {
+      "event": "PostToolUse",
+      "matcher": {
+        "tool": "Bash",
+        "pattern": "git commit"
+      },
+      "action": {
+        "type": "notify",
+        "message": "Commit detected - updating delivery tracking"
+      }
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": {
+        "tool": "Bash",
+        "pattern": "gh pr merge"
+      },
+      "action": {
+        "type": "script",
+        "command": "bun run hooks/on-pr-merge.ts"
+      }
+    },
+    {
+      "event": "UserPromptSubmit",
+      "matcher": {
+        "pattern": "(prd|spec|roadmap|feedback|sprint)"
+      },
+      "action": {
+        "type": "skill",
+        "skill": "ProductManagement"
+      }
+    }
+  ]
+}
