@@ -54,7 +54,7 @@ claude plugin add pm-toolkit
 
 | Server | Capabilities |
 |--------|-------------|
-| `linear-enhanced` | Linear API + AI-powered issue analysis |
+| `linear` | [Linear's official MCP server](https://linear.app/developers/mcp-server) - issues, projects, comments |
 | `jira-pm` | Jira optimized for PM workflows |
 | `feedback-hub` | Unified Intercom/Zendesk/Support interface |
 
@@ -71,6 +71,19 @@ claude plugin add pm-toolkit
 ```bash
 git clone https://github.com/Esk3nder/pm-plugin-research.git ~/.claude/plugins/pm-toolkit
 ```
+
+## Linear Integration
+
+PM Toolkit uses [Linear's official MCP server](https://linear.app/developers/mcp-server). To authenticate:
+
+```bash
+# In Claude Code, run:
+/mcp
+```
+
+This starts the OAuth flow with Linear. Once authenticated, you can use:
+- `/sync-roadmap --target linear` - Sync your roadmap to Linear
+- `roadmap-planner` agent - Plan timelines with Linear issue tracking
 
 ## Plugin Structure
 
@@ -93,7 +106,6 @@ pm-toolkit/
 │       ├── Workflows/       # PM workflow definitions
 │       └── Templates/       # PRD, RFC, Launch Plan templates
 ├── mcp-servers/
-│   ├── linear-enhanced/     # Linear MCP server
 │   ├── jira-pm/             # Jira MCP server
 │   └── feedback-hub/        # Feedback aggregation server
 ├── hooks/

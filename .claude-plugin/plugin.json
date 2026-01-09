@@ -28,9 +28,8 @@
     "skills/ProductManagement"
   ],
   "mcpServers": {
-    "linear-enhanced": {
-      "command": "bun",
-      "args": ["run", "mcp-servers/linear-enhanced/index.ts"]
+    "linear": {
+      "url": "https://mcp.linear.app/mcp"
     },
     "jira-pm": {
       "command": "bun",

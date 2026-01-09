@@ -14,7 +14,7 @@ tools:
   - Glob
   - Grep
 mcpServers:
-  - linear-enhanced
+  - linear
   - jira-pm
 ```
 

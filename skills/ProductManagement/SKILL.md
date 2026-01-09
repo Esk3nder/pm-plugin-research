@@ -102,7 +102,7 @@ Roadmaps and specs update automatically based on:
 
 This skill coordinates with:
 
-- **linear-enhanced** MCP server for issue management
+- **linear** MCP server (Linear's official remote server) for issue management
 - **jira-pm** MCP server for Jira workflows
 - **feedback-hub** MCP server for user feedback
 
