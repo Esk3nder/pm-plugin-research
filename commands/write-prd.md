@@ -2,45 +2,188 @@
 
 Generate a codebase-aware Product Requirements Document.
 
-## Usage
+## Arguments
 
+The feature description follows the command:
 ```
 /write-prd <feature description>
-/write-prd "Add user authentication with OAuth"
-/write-prd --template minimal "Quick login flow"
 ```
 
-## Options
+## Instructions
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--template` | PRD template to use (full, minimal, rfc) | full |
-| `--output` | Output file path | stdout |
-| `--no-codebase` | Skip codebase analysis | false |
+When this command is invoked, follow these steps exactly:
 
-## How It Works
+### Step 1: Parse Input
 
-1. **Codebase Analysis** - Scans your project structure, identifies key modules, APIs, and patterns
-2. **Context Injection** - Feeds architecture understanding into the PRD generation prompt
-3. **Multi-Perspective Review** - Runs the draft through engineering, design, and QA lenses
-4. **Output** - Produces a structured PRD with implementation-ready sections
+Extract the feature description from the command arguments. If no description provided, ask:
+> What feature would you like me to write a PRD for?
 
-## Prompt
+### Step 2: Analyze the Codebase
 
-You are a senior product manager writing a PRD for: {{feature}}
+Before writing anything, understand the project:
 
-First, analyze the codebase context:
-{{codebase_context}}
+**2.1 Project Structure**
+```
+Use Glob to find key files:
+- package.json, Cargo.toml, pyproject.toml (project type)
+- README.md (project description)
+- src/**/*.{ts,js,py,rs,go} (source files, limit to 20)
+- **/test*/** or **/*_test.* (test patterns)
+```
 
-Then write a comprehensive PRD including:
+**2.2 Identify Relevant Code**
+```
+Use Grep to find code related to the feature:
+- Search for keywords from the feature description
+- Find similar existing features
+- Locate API endpoints, services, or modules that might be affected
+```
 
-1. **Overview** - Problem statement and solution summary
-2. **Goals & Non-Goals** - What we're solving and explicitly not solving
-3. **User Stories** - As a [user], I want [action] so that [benefit]
-4. **Technical Context** - Relevant existing code, APIs, and patterns
-5. **Proposed Solution** - High-level approach referencing existing architecture
-6. **Implementation Plan** - Phases with specific modules/files to modify
-7. **Success Metrics** - Measurable outcomes
-8. **Open Questions** - Decisions that need stakeholder input
+**2.3 Read Key Files**
+```
+Read 3-5 most relevant files to understand:
+- Current architecture patterns
+- Existing implementations to follow
+- Integration points
+```
 
-Reference specific files and modules from the codebase context where relevant.
+### Step 3: Generate the PRD
+
+Write a complete PRD with these sections. Be SPECIFIC - reference actual files and code from the codebase.
+
+```markdown
+# PRD: [Feature Name]
+
+**Author:** [User or "PM Toolkit"]
+**Status:** Draft
+**Created:** [Today's date]
+
+---
+
+## Problem Statement
+
+[2-3 sentences describing the problem. Be specific about WHO has this problem and WHY it matters.]
+
+### User Impact
+[How users are affected today without this feature]
+
+### Business Impact
+[Why solving this matters - revenue, retention, efficiency, etc.]
+
+---
+
+## Goals
+
+- [ ] [Specific, measurable goal 1]
+- [ ] [Specific, measurable goal 2]
+- [ ] [Specific, measurable goal 3]
+
+## Non-Goals
+
+- [Explicitly what we're NOT building]
+- [Scope boundaries]
+
+---
+
+## User Stories
+
+**Primary User: [Type]**
+- As a [user], I want [action] so that [benefit]
+
+---
+
+## Technical Context
+
+### Relevant Codebase
+
+| Area | Files | Notes |
+|------|-------|-------|
+| [Area] | `[actual/path/from/codebase]` | [what it does] |
+
+### Existing Patterns
+
+[Reference actual patterns from the codebase you analyzed]
+
+### Dependencies
+
+- External: [APIs, services]
+- Internal: [modules this touches]
+
+---
+
+## Proposed Solution
+
+### Overview
+
+[1 paragraph high-level approach]
+
+### Implementation Phases
+
+#### Phase 1: [Name]
+
+**Goal:** [What this achieves]
+
+Tasks:
+- Modify `[actual/file.ts]` to [change]
+- Create `[new/path/]` for [purpose]
+
+**Deliverable:** [What's shippable]
+
+---
+
+## Success Metrics
+
+| Metric | Current | Target |
+|--------|---------|--------|
+| [Metric] | [Value] | [Value] |
+
+---
+
+## Open Questions
+
+1. [ ] [Real question that needs stakeholder input]
+2. [ ] [Technical decision to make]
+```
+
+### Step 4: Review Pass
+
+After generating the draft, do a quick review:
+
+**Engineering lens:** Is this technically feasible? Did I miss dependencies?
+**Scope lens:** Is this too big? Should it be split into phases?
+
+Fix any issues found.
+
+### Step 5: Output
+
+Present the final PRD to the user. If they specified `--output <file>`, write to that file instead.
+
+---
+
+## Examples
+
+**Example 1:**
+```
+/write-prd "Add OAuth login with Google and GitHub"
+```
+→ Scans codebase for existing auth
+→ Finds `src/auth/` and `src/api/login.ts`
+→ Generates PRD referencing those files
+
+**Example 2:**
+```
+/write-prd "Performance optimization for dashboard loading"
+```
+→ Finds dashboard components
+→ Identifies current data fetching patterns
+→ Generates PRD with specific optimization targets
+
+---
+
+## What Makes This Different
+
+This command produces **codebase-aware** PRDs:
+- References actual files, not hypothetical ones
+- Follows existing patterns in your project
+- Implementation plan uses real module names
+- Technical context is grounded in reality
