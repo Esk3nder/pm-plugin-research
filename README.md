@@ -10,10 +10,10 @@
 | Problem | How PM Toolkit Solves It |
 |---------|--------------------------|
 | PRDs live in Notion, code lives in IDE | **Codebase-aware PRDs** that reference your actual architecture |
-| PMs use 5+ tools that don't talk | **Unified workflow** across Linear, Jira, GitHub Projects |
+| PMs use 5+ tools that don't talk | **Unified workflow** across Linear, Jira, GitHub Issues |
 | User feedback never reaches engineers | **Feedback → Feature pipeline** with auto-tagging |
 | Roadmaps are static PowerPoints | **Living roadmaps** synced to actual delivery status |
-| PRD → Implementation is a black hole | **Full traceability** from spec to merged PR |
+| PRD → Implementation is a black hole | **Traceability** from spec to merged PR |
 
 ## Quick Start
 
@@ -38,7 +38,7 @@ claude plugin add pm-toolkit
 | Command | Description |
 |---------|-------------|
 | `/write-prd` | Generate PRDs that understand your codebase architecture |
-| `/sync-roadmap` | Sync roadmap items to Linear, Jira, or GitHub Projects |
+| `/sync-roadmap` | Sync roadmap items to Linear, Jira, or GitHub Issues |
 | `/analyze-feedback` | Synthesize user feedback from Intercom, Zendesk, etc. |
 | `/sprint-review` | Generate sprint review summaries from actual commits |
 
@@ -55,8 +55,8 @@ claude plugin add pm-toolkit
 | Server | Capabilities |
 |--------|-------------|
 | `linear` | [Linear's official MCP server](https://linear.app/developers/mcp-server) - issues, projects, comments |
-| `jira-pm` | Jira optimized for PM workflows |
-| `feedback-hub` | Unified Intercom/Zendesk/Support interface |
+| `atlassian-rovo` | Atlassian Rovo MCP server for Jira/Confluence/Compass |
+| `feedback-hub` | Unified Intercom/Zendesk feedback ingestion |
 
 ## Installation
 
@@ -72,6 +72,55 @@ claude plugin add pm-toolkit
 git clone https://github.com/Esk3nder/pm-plugin-research.git ~/.claude/plugins/pm-toolkit
 ```
 
+## Configuration & Auth
+
+PM Toolkit reads config from `.pm-toolkit.json` (project root) and environment variables.
+
+### Environment Variables
+
+```
+# Intercom
+INTERCOM_ACCESS_TOKEN=xxx
+INTERCOM_BASE_URL=https://api.intercom.io
+INTERCOM_VERSION=2.14
+
+# Zendesk
+ZENDESK_SUBDOMAIN=yourco
+ZENDESK_EMAIL=you@company.com
+ZENDESK_API_TOKEN=xxx
+```
+
+### .pm-toolkit.json
+
+```json
+{
+  "integrations": {
+    "linear": {
+      "teamId": "your-team-id"
+    },
+    "jira": {
+      "projectKey": "PROJ"
+    },
+    "intercom": {
+      "accessToken": "token"
+    },
+    "zendesk": {
+      "subdomain": "yourco",
+      "email": "you@company.com",
+      "apiToken": "token"
+    }
+  },
+  "templates": {
+    "prd": "default",
+    "rfc": "lightweight"
+  },
+  "codebaseContext": {
+    "include": ["src/**", "packages/**"],
+    "exclude": ["node_modules", "dist"]
+  }
+}
+```
+
 ## Linear Integration
 
 PM Toolkit uses [Linear's official MCP server](https://linear.app/developers/mcp-server). To authenticate:
@@ -84,6 +133,22 @@ PM Toolkit uses [Linear's official MCP server](https://linear.app/developers/mcp
 This starts the OAuth flow with Linear. Once authenticated, you can use:
 - `/sync-roadmap --target linear` - Sync your roadmap to Linear
 - `roadmap-planner` agent - Plan timelines with Linear issue tracking
+
+## Atlassian (Jira/Confluence) Integration
+
+PM Toolkit uses the Atlassian Rovo MCP server. To authenticate:
+
+```bash
+# In Claude Code, run:
+/mcp
+```
+
+Complete the OAuth flow for your Atlassian site. Once authenticated, you can use:
+- `/sync-roadmap --target jira` - Sync your roadmap to Jira
+
+## Delivery Tracking Hooks
+
+The plugin ships a hook that records merged PRs into `.pm-toolkit/delivery-log.md`.
 
 ## Plugin Structure
 
@@ -102,14 +167,12 @@ pm-toolkit/
 │   └── roadmap-planner.md   # Timeline planning agent
 ├── skills/
 │   └── ProductManagement/
-│       ├── SKILL.md         # Core PM skill
-│       ├── Workflows/       # PM workflow definitions
-│       └── Templates/       # PRD, RFC, Launch Plan templates
+│       └── SKILL.md         # Core PM skill
 ├── mcp-servers/
-│   ├── jira-pm/             # Jira MCP server
 │   └── feedback-hub/        # Feedback aggregation server
 ├── hooks/
-│   └── hooks.json           # Event hooks
+│   ├── hooks.json           # Event hooks
+│   └── on-pr-merge.ts       # Delivery log updater
 └── docs/
     └── COMPETITIVE_ANALYSIS.md  # Market research
 ```
@@ -117,41 +180,14 @@ pm-toolkit/
 ## Roadmap
 
 - [x] **V0** - Research & Architecture
-- [ ] **V1** - Codebase-aware PRD Generator
-- [ ] **V2** - Linear/GitHub Projects Integration
-- [ ] **V3** - Feedback Pipeline (Intercom/Zendesk)
+- [x] **V1** - Codebase-aware PRD Generator
+- [x] **V2** - Feedback MCP Server + Atlassian Rovo integration
+- [ ] **V3** - GitHub Projects sync
 - [ ] **V4** - Living Roadmaps with Real-time Sync
-
-## Configuration
-
-Create `.pm-toolkit.json` in your project root:
-
-```json
-{
-  "integrations": {
-    "linear": {
-      "teamId": "your-team-id"
-    },
-    "jira": {
-      "projectKey": "PROJ"
-    }
-  },
-  "templates": {
-    "prd": "default",
-    "rfc": "lightweight"
-  },
-  "codebaseContext": {
-    "include": ["src/**", "packages/**"],
-    "exclude": ["node_modules", "dist"]
-  }
-}
-```
 
 ## Documentation
 
 - [Competitive Analysis](docs/COMPETITIVE_ANALYSIS.md) - Market research and positioning
-- [Architecture Decision Records](docs/adr/) - Key technical decisions
-- [Contributing](CONTRIBUTING.md) - How to contribute
 
 ## Comparison
 

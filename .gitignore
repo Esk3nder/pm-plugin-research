@@ -24,6 +24,9 @@ Thumbs.db
 *.log
 logs/
 
+# PM Toolkit
+.pm-toolkit/
+
 # Cache
 .cache/
 *.tsbuildinfo

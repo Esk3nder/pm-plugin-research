@@ -1,6 +1,6 @@
 # /sync-roadmap
 
-Sync your roadmap to Linear, Jira, or GitHub Projects.
+Sync your roadmap to Linear, Jira, or GitHub Issues.
 
 ## Usage
 
@@ -17,14 +17,14 @@ Sync your roadmap to Linear, Jira, or GitHub Projects.
 | `--target` | Target platform (linear, jira, github) | Yes |
 | `--project` | Project key (Jira) or team (Linear) | Depends |
 | `--repo` | GitHub repository (owner/repo) | For GitHub |
-| `--dry-run` | Preview changes without applying | No |
+| `--dry-run` | Preview changes without applying | Default: true |
 
 ## How It Works
 
-1. **Read Roadmap** - Parses your local roadmap file (markdown or JSON)
-2. **Diff State** - Compares with existing items in target platform
-3. **Sync** - Creates, updates, or archives items to match
-4. **Link** - Maintains bidirectional links between local and remote
+1. **Read Roadmap** - Parse `ROADMAP.md`
+2. **Diff State** - Compare with target platform
+3. **Sync** - Create/update items (dry-run by default)
+4. **Link** - Add IDs back into `ROADMAP.md` if confirmed
 
 ## Roadmap Format
 
@@ -39,27 +39,41 @@ Create `ROADMAP.md` in your project root:
 - Status: In Progress
 - Priority: P0
 - Owner: @alice
+- Jira: PROJ-123
 - Linear: ENG-123
+```
 
-### Performance Optimization
-- Status: Planned
-- Priority: P1
-- Owner: @bob
+## Output Format
+
+```markdown
+# Roadmap Sync (Dry Run)
+
+## Summary
+- Target: Jira
+- Items scanned: 4
+- Creates: 2
+- Updates: 1
+- Skips: 1
+
+## Operations
+1) CREATE: Authentication Overhaul → PROJ (labels: pm-roadmap, pm-status-in-progress)
+2) UPDATE: Performance Optimization → PROJ-214 (priority P1)
+
+## Next Steps
+- Run again with `--dry-run false` to apply
 ```
 
 ## Prompt
 
-You are syncing a product roadmap to {{target}}.
+You are syncing a product roadmap to {{target}}. Default to **dry-run** unless the user explicitly sets `--dry-run false`.
 
-Current roadmap:
-{{roadmap_content}}
+Steps:
+1. Read `ROADMAP.md`. If missing, ask for its location.
+2. Parse each `###` roadmap item and its metadata.
+3. Execute sync based on target:
+   - **linear**: use the Linear MCP server to list existing items and create/update matches.
+   - **jira**: use the Atlassian Rovo MCP server (`atlassian-rovo`) Jira tools to search, create, and update issues.
+   - **github**: if `gh` CLI is available, sync to GitHub **Issues** (not Projects) for the given repo; otherwise return instructions.
+4. Return a deterministic operations list and a short summary.
 
-Existing items in {{target}}:
-{{existing_items}}
-
-Generate the sync operations needed:
-1. Items to CREATE (in roadmap but not in {{target}})
-2. Items to UPDATE (status/priority changed)
-3. Items to ARCHIVE (in {{target}} but removed from roadmap)
-
-For each operation, provide the exact API call parameters.
+If not configured (missing auth), stop and explain how to connect via `/mcp` and which project key is required.

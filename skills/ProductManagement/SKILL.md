@@ -19,7 +19,7 @@ Expert product management capabilities for Claude Code.
 ## What This Skill Enables
 
 - **Codebase-Aware PRDs** - Specs that reference your actual architecture
-- **Living Roadmaps** - Synced to Linear, Jira, GitHub Projects
+- **Living Roadmaps** - Synced to Linear or Jira when configured
 - **Feedback Synthesis** - User voice to actionable features
 - **Sprint Intelligence** - Reviews from actual commits
 
@@ -54,10 +54,8 @@ Maintain links from:
 
 ### 4. Living Documents
 
-Roadmaps and specs update automatically based on:
-- Git activity
-- Issue status changes
-- Milestone completions
+Roadmaps and delivery logs update based on:
+- Git commits and PR merges (via hooks)
 
 ## Templates
 
@@ -103,7 +101,7 @@ Roadmaps and specs update automatically based on:
 This skill coordinates with:
 
 - **linear** MCP server (Linear's official remote server) for issue management
-- **jira-pm** MCP server for Jira workflows
+- **atlassian-rovo** MCP server for Jira workflows
 - **feedback-hub** MCP server for user feedback
 
 ## Examples
