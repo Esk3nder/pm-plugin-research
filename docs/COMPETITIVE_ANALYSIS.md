@@ -259,9 +259,10 @@ pm-toolkit/
 │           ├── RFC.md
 │           └── LaunchPlan.md
 ├── mcp-servers/
-│   ├── linear-enhanced/     # Linear + AI analysis
-│   ├── jira-pm/             # Jira for PMs
 │   └── feedback-hub/        # Intercom/Zendesk unified
+├── mcp-remotes/
+│   ├── linear              # Official remote MCP server
+│   └── atlassian-rovo      # Jira/Confluence/Compass via Rovo MCP
 ├── hooks/
 │   └── hooks.json           # Auto-update on commit, PR events
 └── .mcp.json

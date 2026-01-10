@@ -31,9 +31,8 @@
     "linear": {
       "url": "https://mcp.linear.app/mcp"
     },
-    "jira-pm": {
-      "command": "bun",
-      "args": ["run", "mcp-servers/jira-pm/index.ts"]
+    "atlassian-rovo": {
+      "url": "https://mcp.atlassian.com/v1/mcp"
     },
     "feedback-hub": {
       "command": "bun",

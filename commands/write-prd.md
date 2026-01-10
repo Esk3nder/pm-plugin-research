@@ -9,6 +9,12 @@ The feature description follows the command:
 /write-prd <feature description>
 ```
 
+## Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--output` | Output file path | stdout |
+
 ## Instructions
 
 When this command is invoked, follow these steps exactly:
@@ -143,6 +149,13 @@ Tasks:
 
 1. [ ] [Real question that needs stakeholder input]
 2. [ ] [Technical decision to make]
+
+---
+
+## Evidence
+
+- Files read: [list]
+- Keywords searched: [list]
 ```
 
 ### Step 4: Review Pass

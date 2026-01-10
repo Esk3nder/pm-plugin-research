@@ -15,7 +15,7 @@ tools:
   - Grep
 mcpServers:
   - linear
-  - jira-pm
+  - atlassian-rovo
 ```
 
 ## System Prompt

@@ -14,10 +14,11 @@ Synthesize user feedback from support channels into actionable insights.
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `--source` | Feedback source (intercom, zendesk, all) | all |
+| `--source` | Feedback source (intercom, zendesk, all, file) | all |
 | `--days` | Look back period in days | 30 |
 | `--tag` | Filter by tag/label | none |
 | `--output` | Output file path | stdout |
+| `--file` | Local JSON file (if source=file) | feedback.json |
 
 ## How It Works
 
@@ -45,26 +46,17 @@ Synthesize user feedback from support channels into actionable insights.
 - Sentiment: Frustrated
 - Sample quotes: [...]
 - Recommended action: Add to Q2 roadmap
-
-### 2. "Mobile app performance" (64 mentions)
-- Sentiment: Mixed
-- Sample quotes: [...]
-- Recommended action: Investigate specific flows
 ```
 
 ## Prompt
 
 You are analyzing user feedback to identify product opportunities.
 
-Feedback data:
-{{feedback_data}}
+Steps:
+1. Call `feedback_fetch` with the provided source, days, tag, or file path.
+2. If no data is returned, explain required configuration and stop.
+3. Classify each item into: bug, feature request, question, praise, churn risk.
+4. Cluster into themes and quantify counts.
+5. Produce prioritized recommendations.
 
-Analyze and produce:
-
-1. **Classification** - Categorize each piece of feedback
-2. **Theme Clustering** - Group related feedback
-3. **Quantification** - Count and rank themes
-4. **Sentiment Analysis** - Gauge user emotion per theme
-5. **Recommendations** - Prioritized action items
-
-Focus on actionable insights that could become roadmap items.
+Focus on actionable insights that could become roadmap items. Redact PII and do not quote full messages.

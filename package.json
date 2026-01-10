@@ -1,0 +1,15 @@
+{
+  "name": "pm-toolkit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "mcp:feedback": "bun run mcp-servers/feedback-hub/index.ts",
+    "hook:pr-merge": "bun run hooks/on-pr-merge.ts",
+    "test": "PM_TOOLKIT_TEST=1 bun test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.25.0"
+  }
+}

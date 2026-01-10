@@ -14,7 +14,7 @@ Generate sprint review summaries from actual commits and PRs.
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `--sprint` | Sprint identifier | current |
+| `--sprint` | Sprint identifier or date range | current |
 | `--format` | Output format (summary, slides, detailed) | summary |
 | `--output` | Output file path | stdout |
 
@@ -22,7 +22,7 @@ Generate sprint review summaries from actual commits and PRs.
 
 1. **Gather Data** - Pulls commits, PRs, and issues from the sprint period
 2. **Map to Goals** - Links work to sprint goals/roadmap items
-3. **Calculate Metrics** - Velocity, completion rate, cycle time
+3. **Calculate Metrics** - Velocity, completion rate, cycle time (best-effort)
 4. **Generate Summary** - Creates stakeholder-ready review
 
 ## Output Format
@@ -40,42 +40,25 @@ Generate sprint review summaries from actual commits and PRs.
 
 ## Key Metrics
 
-- Velocity: 34 points (vs 32 planned)
 - PRs merged: 23
 - Bugs fixed: 12
-- Avg cycle time: 2.3 days
 
 ## Highlights
 
 - Shipped OAuth integration ahead of schedule
 - Reduced API latency by 40%
-
-## Blockers & Risks
-
-- App Store review taking longer than expected
-- Need design review on settings page
-
-## Next Sprint Focus
-
-1. Complete mobile launch
-2. Start analytics dashboard
 ```
 
 ## Prompt
 
 You are generating a sprint review for stakeholders.
 
-Sprint data:
-- Commits: {{commits}}
-- PRs: {{pull_requests}}
-- Issues: {{issues}}
-- Sprint goals: {{sprint_goals}}
+Steps:
+1. Determine sprint date range. If none provided, use the last 14 days.
+2. Collect data:
+   - `git log --since <date> --pretty=format:"%h|%ad|%s"`
+   - If `gh` CLI is available, fetch merged PRs for the range.
+3. Identify sprint goals from `ROADMAP.md` or recent sprint docs if present.
+4. Produce a concise review with goals vs delivery, metrics, highlights, risks, and next focus.
 
-Generate a concise, stakeholder-friendly review covering:
-1. Goals vs actual delivery
-2. Key metrics
-3. Highlights worth celebrating
-4. Blockers and risks
-5. Recommendations for next sprint
-
-Keep it scannable - executives should get the gist in 30 seconds.
+If any data source is missing, note it and proceed with what you have.
